@@ -178,7 +178,7 @@ class FutballGUI:
 
         # Check whether the fool player couldn't move fast enough.
         for b in self.balls:
-            feet = np.array([self.eye['point'][0], b.radius, self.eye['point'][2]])
+            feet = self.eye['point'] - np.array([0,self.player_height,0])
             if b.distance_to(feet) < b.radius or b.distance_to(self.eye['point']) < b.radius :
                 print("You got to {} balls, but now you're dead.".format(len(self.balls)))
                 raise FutballDead()
