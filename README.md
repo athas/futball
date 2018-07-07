@@ -30,8 +30,8 @@ pick it up.
 Controls
 --------
 
-Move around with WASD, look with the mouse, and jump with the space
-bar.
+Move around with WASD or the arrow keys, look with the mouse, and jump
+with the space bar.
 
 Windows?
 --------
