@@ -15,7 +15,7 @@ Usage
 
 Run `make` to compile.  You will need:
 
-  * [Futhark](https://futhark-lang.org), probably at least version 0.6
+  * [Futhark](https://futhark-lang.org), probably at least version 0.6 ([installation instructions](https://futhark.readthedocs.io/en/latest/installation.html))
   * pygame
   * Numpy
   * pyopencl
