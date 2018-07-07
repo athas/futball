@@ -12,7 +12,7 @@ addons:
     - libgmp-dev
     - libffi6
     - ocl-icd-libopencl1
-    - opencl-c-headers
+    - opencl-headers
 
 before_install:
  # install Futhark
