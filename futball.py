@@ -5,6 +5,7 @@ import pygame
 import sys
 import math
 import random
+import argparse
 
 try:
     import _engine
@@ -43,12 +44,16 @@ class FutballDead(Exception):
     pass
 
 class FutballGUI:
-    def __init__ (self, width=1280, height=720, fov=105, bouncelimit=5,
-                  movespeed=1000, rotspeed=math.pi, max_ball_dist=10000,
-                  player_height=100, target_fps=60):
-        self.width = width
-        self.height = height
-        self.fov = 105
+    def __init__ (self, args):
+        bouncelimit=5
+        movespeed=1000
+        rotspeed=math.pi
+        max_ball_dist=10000
+        player_height=100
+
+        self.width = args.width
+        self.height = args.height
+        self.fov = args.fov
         self.bouncelimit = 5
         self.movespeed = movespeed
         self.rotspeed = rotspeed
@@ -56,7 +61,7 @@ class FutballGUI:
         self.player_height = 100
         self.max_ball_dist = max_ball_dist
         self.seconds_per_ball = 3
-        self.target_fps = target_fps
+        self.target_fps = args.fps
 
         self.white=0xffffff
         self.red=0xff0000
@@ -284,10 +289,22 @@ class FutballGUI:
 
         self.render()
 
-def main(args):
-    f = FutballGUI()
+def main():
+    parser = argparse.ArgumentParser(description='FUTBALL')
+    parser.add_argument('--fps', metavar='N', type=int,
+                        help='cap FPS to this number', default=60)
+    parser.add_argument('--fov', metavar='D', type=int,
+                        help='field of view', default=105)
+    parser.add_argument('--width', metavar='N', type=int,
+                        help='width of the window in pixels', default=1280)
+    parser.add_argument('--height', metavar='N', type=int,
+                        help='height of the window in pixels', default=720)
+
+    args = parser.parse_args()
+
+    f = FutballGUI(args)
     f.run()
     return 0
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())
