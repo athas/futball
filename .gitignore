@@ -1,0 +1,5 @@
+_engine*
+*.c
+*.pyc
+*.h
+engine.py
