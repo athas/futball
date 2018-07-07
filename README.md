@@ -22,6 +22,11 @@ Run `make` to compile.  You will need:
 
 The latter three can be installed with `pip install -r requirements.txt`.
 
+If you are very brave, you can also try
+[futhark-pycffi](https://github.com/pepijndevos/futhark-pycffi).
+Install it and run `make _engine.so`.  The game will automatically
+pick it up.
+
 Controls
 --------
 
