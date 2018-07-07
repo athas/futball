@@ -11,6 +11,7 @@ addons:
     - wget
     - libgmp-dev
     - libffi6
+    - ocl-icd-libopencl1
 
 before_install:
  # install Futhark
