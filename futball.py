@@ -268,7 +268,7 @@ class FutballGUI:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
                 if event.unicode == 'z':
-                    self.bouncelimit = max(bouncelimit-1, 1)
+                    self.bouncelimit = max(self.bouncelimit-1, 1)
                 if event.unicode == 'x':
                     self.bouncelimit += 1
 
