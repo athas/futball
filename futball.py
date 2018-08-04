@@ -321,6 +321,8 @@ class FutballGUI:
 
         camera_pos, camera_dir, camera_desc = self.cameras[self.camera]()
 
+        self.render(camera_pos, camera_dir, camera_desc)
+
         self.maybe_insert_ball(delta)
 
         self.check_for_collisions()
@@ -332,8 +334,6 @@ class FutballGUI:
         self.update_ball_positions(delta)
 
         self.adjust_sounds(camera_pos)
-
-        self.render(camera_pos, camera_dir, camera_desc)
 
 def main():
     parser = argparse.ArgumentParser(description='FUTBALL')
