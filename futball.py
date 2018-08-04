@@ -198,12 +198,12 @@ class FutballGUI:
                 print("You got to {} balls, but now you're dead.".format(len(self.balls)))
                 raise FutballDead()
 
-    def adjust_sounds(self):
+    def adjust_sounds(self, camera_pos):
         dropoff=2000
         closeness = 0.1
         for i in range(len(self.balls)):
             b = self.balls[i]
-            closeness = np.log2(dropoff/np.linalg.norm(self.player_pos-b.pos))
+            closeness = np.log2(dropoff/np.linalg.norm(camera_pos-b.pos))
             pygame.mixer.Channel(i).set_volume(max(0.1, closeness))
 
     def behind_camera(self):
@@ -230,12 +230,10 @@ class FutballGUI:
                 camera_dir,
                 "first person")
 
-    def render(self):
+    def render(self, camera_pos, camera_dir, camera_desc):
         def show_text(what, where):
             text = self.font.render(what, 1, (255, 255, 255))
             self.screen.blit(text, where)
-
-        camera_pos, camera_dir, camera_desc = self.cameras[self.camera]()
 
         frame = self.engine.render(self.world, self.width, self.height, self.fov,
                                    camera_pos[0], camera_pos[1], camera_pos[2],
@@ -321,6 +319,8 @@ class FutballGUI:
     def tick(self):
         delta = self.clock.tick(self.target_fps) / 1000.0
 
+        camera_pos, camera_dir, camera_desc = self.cameras[self.camera]()
+
         self.maybe_insert_ball(delta)
 
         self.check_for_collisions()
@@ -331,9 +331,9 @@ class FutballGUI:
 
         self.update_ball_positions(delta)
 
-        self.adjust_sounds()
+        self.adjust_sounds(camera_pos)
 
-        self.render()
+        self.render(camera_pos, camera_dir, camera_desc)
 
 def main():
     parser = argparse.ArgumentParser(description='FUTBALL')
