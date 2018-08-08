@@ -1,5 +1,4 @@
-import "/futlib/colour"
-import "/futlib/math"
+import "lib/github.com/athas/matte/colour"
 import "types"
 
 module type object = {

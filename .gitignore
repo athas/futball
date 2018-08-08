@@ -3,3 +3,4 @@ _engine*
 *.pyc
 *.h
 engine.py
+engine/lib
