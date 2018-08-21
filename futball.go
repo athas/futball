@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"time"
+	"github.com/veandco/go-sdl2/gfx"
 	"math"
 )
 
@@ -135,25 +135,15 @@ func main() {
 		}
 	}
 
-	render := func() {
-		start := time.Now()
-
+	render := func(fps float64) {
 		eye := CameraBehind(player_radius, player_pos, player_dir)
 		game.Render(fov, eye.pos.x, eye.pos.y, eye.pos.z, eye.dir.a, eye.dir.b, ambient, ambient_intensity, rendering_limit)
 
-		fut_time := time.Now().Sub(start)
-
-		start = time.Now()
 		if err = frame_surface.Blit(nil, window_surface, nil); err != nil {
 			panic(err)
 		}
-		blit_time := time.Now().Sub(start)
 
-		showText(
-			fmt.Sprintf(
-				"Futhark call took %.2fms; blitting took %.2fms.",
-				fut_time.Seconds()*1000, blit_time.Seconds()*1000),
-			0, 0)
+		showText(fmt.Sprintf("FPS: %.2f", fps), 0, 0)
 
 		window.UpdateSurface()
 	}
@@ -177,8 +167,12 @@ func main() {
 	}
 
 	running := true
+	var fpsmgr gfx.FPSmanager
+	gfx.InitFramerate(&fpsmgr)
+	gfx.SetFramerate(&fpsmgr, 60)
 	for running {
-		render()
+		delay := gfx.FramerateDelay(&fpsmgr)
+		render(1000 / float64(delay))
 
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {
