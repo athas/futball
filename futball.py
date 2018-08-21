@@ -75,7 +75,6 @@ class FutballGUI:
         pygame.init()
         pygame.display.set_caption('Futball!')
         self.screen = pygame.display.set_mode(size)
-        self.surface = pygame.Surface(size, depth=32)
         self.font = pygame.font.Font(None, 36)
         pygame.key.set_repeat(500, 50)
         pygame.event.set_grab(True)
@@ -239,9 +238,8 @@ class FutballGUI:
                                    camera_pos[0], camera_pos[1], camera_pos[2],
                                    camera_dir[0], camera_dir[1],
                                    self.ambient, self.ambient_intensity,
-                                   self.bouncelimit).transpose().get()
-        pygame.surfarray.blit_array(self.surface, frame)
-        self.screen.blit(self.surface, (0, 0))
+                                   self.bouncelimit).get().transpose((1,0,2))
+        self.screen.blit(pygame.surfarray.make_surface(frame), (0, 0))
 
         speedmessage = "FPS: %.2f (%d bounces)   Camera: %s ('c' to cycle)" % (self.clock.get_fps(), self.bouncelimit, camera_desc)
         show_text(speedmessage, (10, 10))
