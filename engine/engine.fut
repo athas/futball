@@ -82,8 +82,7 @@ let trace_ray (limit: i32) ({spheres,planes}: objects) (lights: lights)
         point,
         newdir,
         visibility * shine)
-  let (r, g, b, _) = argb.to_rgba refl_colour
-  in [u8.f32(r*255), u8.f32(g*255), u8.f32(b*255)]
+  in refl_colour
 
 type world = {objects: objects, lights: lights}
 
@@ -140,7 +139,7 @@ entry render ({objects, lights}: world)
              (eye_pos_X: f32) (eye_pos_Y: f32) (eye_pos_Z: f32)
              (eye_dir_A: f32) (eye_dir_B: f32)
              (ambient: argb.colour) (ambient_intensity: f32)
-             (limit: i32) : [sizeY][sizeX][3]u8 =
+             (limit: i32) : [sizeY][sizeX]argb.colour =
   let (r,g,b,_) = argb.to_rgba ambient
   let ambient = argb.from_rgba (r*ambient_intensity) (g*ambient_intensity) (b*ambient_intensity) 1.0
   let eye_pos = {x=eye_pos_X, y=eye_pos_Y, z=eye_pos_Z}
