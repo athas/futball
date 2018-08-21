@@ -6,7 +6,7 @@ import "intersection"
 import "lights"
 
 let cast_view_rays (sizeX: i32) (sizeY: i32) (fov: i32) (eye_dir: position)
-                 : [sizeX][sizeY]direction =
+                 : [sizeY][sizeX]direction =
   let eye_vector = vec3.(normalise eye_dir)
   let vp_right = vec3.normalise (vec3.cross eye_vector {x=0,y=1,z=0})
   let vp_up = vec3.normalise (vec3.cross vp_right eye_vector)
@@ -23,7 +23,7 @@ let cast_view_rays (sizeX: i32) (sizeY: i32) (fov: i32) (eye_dir: position)
     let xcomp = vec3.scale ((r32 x * pixel_width) - half_width) vp_right
     let ycomp = vec3.scale ((r32 y * pixel_height) - half_height) vp_up
     in vec3.(normalise (eye_vector + xcomp + ycomp))
-  in map (\x -> map (cast x) (reverse (iota sizeY))) (iota sizeX)
+  in map (\y -> map (`cast` y) (iota sizeX)) (reverse (iota sizeY))
 
 let hit_sphere (sph: sphere) (dist: f32) (orig: position) (dir: direction)
              : (position, direction, argb.colour, f32) =
@@ -139,7 +139,7 @@ entry render ({objects, lights}: world)
              (eye_pos_X: f32) (eye_pos_Y: f32) (eye_pos_Z: f32)
              (eye_dir_A: f32) (eye_dir_B: f32)
              (ambient: argb.colour) (ambient_intensity: f32)
-             (limit: i32) =
+             (limit: i32) : [sizeY][sizeX]argb.colour =
   let (r,g,b,_) = argb.to_rgba ambient
   let ambient = argb.from_rgba (r*ambient_intensity) (g*ambient_intensity) (b*ambient_intensity) 1.0
   let eye_pos = {x=eye_pos_X, y=eye_pos_Y, z=eye_pos_Z}

@@ -239,7 +239,7 @@ class FutballGUI:
                                    camera_pos[0], camera_pos[1], camera_pos[2],
                                    camera_dir[0], camera_dir[1],
                                    self.ambient, self.ambient_intensity,
-                                   self.bouncelimit).get()
+                                   self.bouncelimit).transpose().get()
         pygame.surfarray.blit_array(self.surface, frame)
         self.screen.blit(self.surface, (0, 0))
 
