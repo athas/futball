@@ -14,5 +14,9 @@ _engine.so: engine.c
 
 engine/lib: engine/futhark.pkg
 	cd engine && futhark-pkg sync
+
+futball: engine.c futball.go
+	go build
+
 clean:
-	rm -rf *.c *.o *.so *.pyc engine/lib engine.py
+	rm -rf *.c *.o *.so *.pyc engine/lib engine.py futball
