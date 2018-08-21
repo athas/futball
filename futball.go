@@ -64,6 +64,7 @@ var player_shine = 0.1
 var floor_y float64 = 0
 var ambient uint32 = 0xffffff
 var ambient_intensity float64 = 0.0
+var movespeed float64 = 1000
 
 func (game *Game) Init(player_pos Pos) {
 	game.AddPlane(0, float32(floor_y), 0, 0, 1, 0, 0xffffff, 0.2)
@@ -162,11 +163,6 @@ func main() {
 	onKeyboard := func(t sdl.KeyboardEvent) {
 		if t.Type == sdl.KEYDOWN {
 			switch t.Keysym.Sym {
-			case sdl.K_SPACE:
-				if !in_jump {
-					trajectory.y = 1500
-					in_jump = true
-				}
 			}
 		}
 	}
@@ -196,6 +192,37 @@ func main() {
 			trajectory.y = 0
 			trajectory.z = 0
 			in_jump = false
+		}
+
+
+		forwards := func (amount float64) {
+			a := player_dir.a
+			trajectory.x += amount * math.Cos(a)
+			trajectory.z += amount * math.Sin(a)
+		}
+
+		sideways := func (amount float64) {
+			a := player_dir.a + math.Pi/2
+			trajectory.x += amount * math.Cos(a)
+			trajectory.z += amount * math.Sin(a)
+		}
+
+		pressed := sdl.GetKeyboardState()
+		if pressed[sdl.SCANCODE_A] != 0 && !in_jump {
+			sideways(-movespeed)
+		}
+		if pressed[sdl.SCANCODE_D] != 0 && !in_jump {
+			sideways(movespeed)
+		}
+		if pressed[sdl.SCANCODE_W] != 0 && !in_jump {
+			forwards(movespeed)
+		}
+		if pressed[sdl.SCANCODE_S] != 0 && !in_jump {
+			forwards(-movespeed)
+		}
+		if pressed[sdl.SCANCODE_SPACE] != 0 && !in_jump {
+			trajectory.y = 1500
+			in_jump = true
 		}
 
 		player_pos.x += trajectory.x * tdelta
