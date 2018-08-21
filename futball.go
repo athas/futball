@@ -58,24 +58,14 @@ func CameraBehind(player_radius float64, p Pos, d Dir) (c Camera) {
 	return c
 }
 
-func main() {
-	var err error
+var player_radius float64 = 50
+var player_colour uint32 = 0xFF0000
+var player_shine = 0.1
+var floor_y float64 = 0
+var ambient uint32 = 0xffffff
+var ambient_intensity float64 = 0.0
 
-	screenX := 1024
-	screenY := 768
-	rendering_limit := 5
-	fov := 105
-	var floor_y float64 = 0
-	var ambient uint32 = 0xffffff
-	var ambient_intensity float64 = 0.0
-	var player_radius float64 = 50
-	var player_colour uint32 = 0xFF0000
-	player_shine := 0.1
-	player_pos := Pos { 0, player_radius, 0 }
-	player_dir := Dir { 0, 0 }
-
-	game := NewGame(screenX, screenY)
-	defer game.Free()
+func (game *Game) Init(player_pos Pos) {
 	game.AddPlane(0, floor_y, 0, 0, 1, 0, 0xffffff, 0.2)
 	game.AddLight(2000, 1000, 0, 0xFF000000, 1)
 	game.AddLight(-2000, 3000, 0, 0x00FF00, 1)
@@ -83,6 +73,23 @@ func main() {
 	game.AddLight(0, 1000, -2000, 0xFFFF00, 1)
 	game.AddSphere(player_pos.x, player_pos.y, player_pos.z,
 		player_radius, player_colour, player_shine)
+}
+
+func main() {
+	var err error
+
+	screenX := 1024
+	screenY := 768
+	player_pos := Pos{ 0, player_radius, 0 }
+	player_dir := Dir{ 0, 0 }
+	trajectory := Pos{ 0, 0, 0 }
+	in_jump := false
+	rendering_limit := 5
+	fov := 105
+
+	game := NewGame(screenX, screenY)
+	defer game.Free()
+	game.Init(player_pos)
 
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		panic(err)
@@ -151,6 +158,11 @@ func main() {
 	onKeyboard := func(t sdl.KeyboardEvent) {
 		if t.Type == sdl.KEYDOWN {
 			switch t.Keysym.Sym {
+			case sdl.K_SPACE:
+				if !in_jump {
+					trajectory.y = 1500
+					in_jump = true
+				}
 			}
 		}
 	}
@@ -166,13 +178,44 @@ func main() {
 
 	}
 
+	doMovement := func (tdelta float64) {
+		if in_jump {
+			trajectory.y -= 9.8 * 500 * tdelta
+		} else {
+			trajectory.x = 0
+			trajectory.z = 0
+		}
+
+		if player_pos.y < floor_y + player_radius {
+			player_pos.y = floor_y + player_radius
+			trajectory.x = 0
+			trajectory.y = 0
+			trajectory.z = 0
+			in_jump = false
+		}
+
+		player_pos.x += trajectory.x * tdelta
+		player_pos.y += trajectory.y * tdelta
+		player_pos.z += trajectory.z * tdelta
+	}
+
+	updateBallPositions := func () {
+		game.SetSpherePositions(
+			[]float32{float32(player_pos.x)},
+			[]float32{float32(player_pos.y)},
+			[]float32{float32(player_pos.z)})
+	}
+
 	running := true
 	var fpsmgr gfx.FPSmanager
 	gfx.InitFramerate(&fpsmgr)
 	gfx.SetFramerate(&fpsmgr, 60)
 	for running {
-		delay := gfx.FramerateDelay(&fpsmgr)
-		render(1000 / float64(delay))
+		tdelta := float64(gfx.FramerateDelay(&fpsmgr))
+
+		render(1000 / tdelta)
+		doMovement(tdelta / 1000)
+		updateBallPositions()
 
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch t := event.(type) {

@@ -56,7 +56,7 @@ func (g *Game) SetSphereRadius(i int32, radius float64) {
 	C.futhark_entry_set_sphere_radius(g.ctx, &g.world, g.world, C.int32_t(i), C.float(radius))
 }
 
-func (g *Game) SetSpherePositions(xs []float64, ys []float64, zs []float64) {
+func (g *Game) SetSpherePositions(xs []float32, ys []float32, zs []float32) {
 	defer C.futhark_free_opaque_world(g.ctx, g.world)
 	xs_fut := C.futhark_new_f32_1d(g.ctx, (*C.float)(unsafe.Pointer(&xs[0])), C.int32_t(len(xs)))
 	defer C.futhark_free_f32_1d(g.ctx, xs_fut)
