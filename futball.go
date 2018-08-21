@@ -66,13 +66,14 @@ var ambient uint32 = 0xffffff
 var ambient_intensity float64 = 0.0
 
 func (game *Game) Init(player_pos Pos) {
-	game.AddPlane(0, floor_y, 0, 0, 1, 0, 0xffffff, 0.2)
+	game.AddPlane(0, float32(floor_y), 0, 0, 1, 0, 0xffffff, 0.2)
 	game.AddLight(2000, 1000, 0, 0xFF000000, 1)
 	game.AddLight(-2000, 3000, 0, 0x00FF00, 1)
 	game.AddLight(0, 1000, 2000, 0x0000FF, 1)
 	game.AddLight(0, 1000, -2000, 0xFFFF00, 1)
-	game.AddSphere(player_pos.x, player_pos.y, player_pos.z,
-		player_radius, player_colour, player_shine)
+	game.AddSphere(
+		float32(player_pos.x), float32(player_pos.y), float32(player_pos.z),
+		float32(player_radius), player_colour, float32(player_shine))
 }
 
 func main() {
@@ -144,7 +145,10 @@ func main() {
 
 	render := func(fps float64) {
 		eye := CameraBehind(player_radius, player_pos, player_dir)
-		game.Render(fov, eye.pos.x, eye.pos.y, eye.pos.z, eye.dir.a, eye.dir.b, ambient, ambient_intensity, rendering_limit)
+		game.Render(fov,
+			float32(eye.pos.x), float32(eye.pos.y), float32(eye.pos.z),
+			float32(eye.dir.a), float32(eye.dir.b),
+			ambient, float32(ambient_intensity), rendering_limit)
 
 		if err = frame_surface.Blit(nil, window_surface, nil); err != nil {
 			panic(err)

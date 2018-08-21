@@ -15,7 +15,7 @@ _engine.so: engine.c
 engine/lib: engine/futhark.pkg
 	cd engine && futhark-pkg sync
 
-futball: engine.c futball.go
+futball: engine.c futball.go engine.go
 	go build
 
 clean:
