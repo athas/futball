@@ -9,17 +9,17 @@ package main
 import "C"
 
 import (
-	"unsafe"
 	"os"
+	"unsafe"
 )
 
 type Game struct {
-	cfg       *C.struct_futhark_context_config
-	ctx       *C.struct_futhark_context
-	world     *C.struct_futhark_opaque_world
-	Frame     unsafe.Pointer
-	screenX   C.int32_t
-	screenY   C.int32_t
+	cfg     *C.struct_futhark_context_config
+	ctx     *C.struct_futhark_context
+	world   *C.struct_futhark_opaque_world
+	Frame   unsafe.Pointer
+	screenX C.int32_t
+	screenY C.int32_t
 }
 
 func NewGame(screenX, screenY int) Game {

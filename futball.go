@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/veandco/go-sdl2/gfx"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"github.com/veandco/go-sdl2/gfx"
 	"math"
 )
 
@@ -41,15 +41,15 @@ type Camera struct {
 }
 
 func CameraBehind(player_radius float64, p Pos, d Dir) (c Camera) {
-	dir_vec_x := math.Cos(d.a)*math.Cos(d.b)
+	dir_vec_x := math.Cos(d.a) * math.Cos(d.b)
 	dir_vec_y := math.Sin(d.b)
-	dir_vec_z := math.Sin(d.a)*math.Cos(d.b)
+	dir_vec_z := math.Sin(d.a) * math.Cos(d.b)
 
-	c.pos.x = p.x - dir_vec_x * player_radius * 10
-	c.pos.y = p.y - dir_vec_y * player_radius * 10
-	c.pos.z = p.z - dir_vec_z * player_radius * 10
+	c.pos.x = p.x - dir_vec_x*player_radius*10
+	c.pos.y = p.y - dir_vec_y*player_radius*10
+	c.pos.z = p.z - dir_vec_z*player_radius*10
 
-	if (c.pos.y < 1) {
+	if c.pos.y < 1 {
 		c.pos.y = 1
 	}
 
@@ -82,9 +82,9 @@ func main() {
 
 	screenX := 1024
 	screenY := 768
-	player_pos := Pos{ 0, player_radius, 0 }
-	player_dir := Dir{ 0, 0 }
-	trajectory := Pos{ 0, 0, 0 }
+	player_pos := Pos{0, player_radius, 0}
+	player_dir := Dir{0, 0}
+	trajectory := Pos{0, 0, 0}
 	in_jump := false
 	rendering_limit := 5
 	fov := 105
@@ -167,18 +167,18 @@ func main() {
 		}
 	}
 
-	onMouseMotion := func (t sdl.MouseMotionEvent) {
+	onMouseMotion := func(t sdl.MouseMotionEvent) {
 		delta_x := t.XRel
 		delta_y := t.YRel
 
-		player_dir.a += float64(delta_x)/float64(screenX)
-		player_dir.b += float64(delta_y)/float64(screenY)
+		player_dir.a += float64(delta_x) / float64(screenX)
+		player_dir.b += float64(delta_y) / float64(screenY)
 		player_dir.a = math.Mod(player_dir.a, math.Pi*2)
 		player_dir.b = min(max(player_dir.b, -math.Pi/2+0.001), math.Pi/2-0.001)
 
 	}
 
-	doMovement := func (tdelta float64) {
+	doMovement := func(tdelta float64) {
 		if in_jump {
 			trajectory.y -= 9.8 * 500 * tdelta
 		} else {
@@ -186,7 +186,7 @@ func main() {
 			trajectory.z = 0
 		}
 
-		if player_pos.y < floor_y + player_radius {
+		if player_pos.y < floor_y+player_radius {
 			player_pos.y = floor_y + player_radius
 			trajectory.x = 0
 			trajectory.y = 0
@@ -194,14 +194,13 @@ func main() {
 			in_jump = false
 		}
 
-
-		forwards := func (amount float64) {
+		forwards := func(amount float64) {
 			a := player_dir.a
 			trajectory.x += amount * math.Cos(a)
 			trajectory.z += amount * math.Sin(a)
 		}
 
-		sideways := func (amount float64) {
+		sideways := func(amount float64) {
 			a := player_dir.a + math.Pi/2
 			trajectory.x += amount * math.Cos(a)
 			trajectory.z += amount * math.Sin(a)
@@ -230,7 +229,7 @@ func main() {
 		player_pos.z += trajectory.z * tdelta
 	}
 
-	updateBallPositions := func () {
+	updateBallPositions := func() {
 		game.SetSpherePositions(
 			[]float32{float32(player_pos.x)},
 			[]float32{float32(player_pos.y)},
