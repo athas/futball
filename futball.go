@@ -66,7 +66,7 @@ var ambient uint32 = 0xffffff
 var ambient_intensity float64 = 0.0
 var movespeed float64 = 1000
 
-func (game *Game) Init(player_pos Pos) {
+func (game *Engine) Init(player_pos Pos) {
 	game.AddPlane(0, float32(floor_y), 0, 0, 1, 0, 0xffffff, 0.2)
 	game.AddLight(2000, 1000, 0, 0xFF000000, 1)
 	game.AddLight(-2000, 3000, 0, 0x00FF00, 1)
@@ -89,7 +89,7 @@ func main() {
 	rendering_limit := 5
 	fov := 105
 
-	game := NewGame(screenX, screenY)
+	game := NewEngine(screenX, screenY)
 	defer game.Free()
 	game.Init(player_pos)
 
