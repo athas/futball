@@ -111,7 +111,7 @@ entry set_sphere_radius ({objects={spheres, planes}, lights}: world)
                         (i: i32) (radius: f32) : world =
   let update {position, radius=_, colour, shine} =
     { position, radius, colour, shine }
-  in ({objects={spheres = copy spheres with [i] <- update spheres[i],
+  in ({objects={spheres = copy spheres with [i] = update spheres[i],
                 planes},
        lights})
 
