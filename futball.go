@@ -239,6 +239,17 @@ func (g *Game) updateBallPositions() {
 		[]float32{float32(g.player_pos.z)})
 }
 
+func onKeyboard(g *Game, t sdl.KeyboardEvent) {
+	if t.Type == sdl.KEYDOWN {
+		switch t.Keysym.Sym {
+		case sdl.K_f:
+			g.window.SetFullscreen(1)
+		case sdl.K_g:
+			g.window.SetFullscreen(0)
+		}
+	}
+}
+
 func (g *Game) run() {
 	running := true
 	var fpsmgr gfx.FPSmanager
@@ -257,6 +268,8 @@ func (g *Game) run() {
 				running = false
 			case *sdl.MouseMotionEvent:
 				g.onMouseMotion(*t)
+			case *sdl.KeyboardEvent:
+				onKeyboard(g, *t)
 			}
 		}
 	}
