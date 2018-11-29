@@ -239,6 +239,8 @@ func (g *Game) updateBallPositions() {
 		[]float32{float32(g.player_pos.z)})
 }
 
+var grabbed bool = true
+
 func onKeyboard(g *Game, t sdl.KeyboardEvent) {
 	if t.Type == sdl.KEYDOWN {
 		switch t.Keysym.Sym {
@@ -246,6 +248,10 @@ func onKeyboard(g *Game, t sdl.KeyboardEvent) {
 			g.window.SetFullscreen(1)
 		case sdl.K_g:
 			g.window.SetFullscreen(0)
+		case sdl.K_r:
+			grabbed = !grabbed
+			g.window.SetGrab(grabbed)
+			sdl.SetRelativeMouseMode(grabbed)
 		}
 	}
 }
