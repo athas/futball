@@ -13,7 +13,7 @@ _engine.so: engine.c
 	build_futhark_ffi engine
 
 engine/lib: engine/futhark.pkg
-	cd engine && futhark-pkg sync
+	cd engine && futhark pkg sync
 
 futball: engine.c futball.go engine.go
 	go build
