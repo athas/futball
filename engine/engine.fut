@@ -84,7 +84,7 @@ let trace_ray (limit: i32) ({spheres,planes}: objects) (lights: lights)
         visibility * shine)
   in refl_colour
 
-type world = {objects: objects, lights: lights}
+type~ world = {objects: objects, lights: lights}
 
 entry empty_world: world = {objects={spheres = [], planes = []}, lights = ([]: lights)}
 

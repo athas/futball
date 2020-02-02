@@ -7,7 +7,7 @@ type light = {position: position,
               colour: argb.colour,
               intensity: f32}
 
-type lights = []light
+type~ lights = []light
 
 let apply_light ({spheres,planes}: objects) (point: position) (normal: direction)
                 (light: light): argb.colour =

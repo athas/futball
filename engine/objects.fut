@@ -72,4 +72,4 @@ let checkers (c: argb.colour) ({x,y=_,z}: position): argb.colour =
      then c
      else c |> argb.dim |> argb.dim |> argb.dim
 
-type objects = {spheres: []sphere, planes: []plane}
+type~ objects = {spheres: []sphere, planes: []plane}
