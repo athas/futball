@@ -5,23 +5,23 @@ import "objects"
 import "intersection"
 import "lights"
 
-let cast_view_rays (sizeX: i32) (sizeY: i32) (fov: i32) (eye_dir: position)
+let cast_view_rays (sizeX: i64) (sizeY: i64) (fov: i32) (eye_dir: position)
                  : [sizeY][sizeX]direction =
   let eye_vector = vec3.(normalise eye_dir)
   let vp_right = vec3.normalise (vec3.cross eye_vector {x=0,y=1,z=0})
   let vp_up = vec3.normalise (vec3.cross vp_right eye_vector)
   let fov_radians = f32.pi * (r32 fov / 2) / 180
-  let height_width_ratio = r32 sizeY / r32 sizeX
+  let height_width_ratio = f32.i64 sizeY / f32.i64 sizeX
   let half_width = f32.tan fov_radians
   let half_height = height_width_ratio * half_width
   let camera_width = half_width * 2
   let camera_height = half_height * 2
-  let pixel_width = camera_width / (r32 sizeX - 1)
-  let pixel_height = camera_height / (r32 sizeY - 1)
+  let pixel_width = camera_width / (f32.i64 sizeX - 1)
+  let pixel_height = camera_height / (f32.i64 sizeY - 1)
 
-  let cast (x: i32) (y: i32) =
-    let xcomp = vec3.scale ((r32 x * pixel_width) - half_width) vp_right
-    let ycomp = vec3.scale ((r32 y * pixel_height) - half_height) vp_up
+  let cast (x: i64) (y: i64) =
+    let xcomp = vec3.scale ((f32.i64 x * pixel_width) - half_width) vp_right
+    let ycomp = vec3.scale ((f32.i64 y * pixel_height) - half_height) vp_up
     in vec3.(normalise (eye_vector + xcomp + ycomp))
   in map (\y -> map (`cast` y) (iota sizeX)) (reverse (iota sizeY))
 
@@ -92,7 +92,7 @@ entry add_sphere ({objects={spheres, planes}, lights}: world)
                  (x: f32) (y: f32) (z: f32)
                  (radius: f32)
                  (colour: argb.colour)
-                 (shine: f32): (world, i32) =
+                 (shine: f32): (world, i64) =
   ({objects={spheres = spheres ++ [{position={x, y, z}, radius, colour, shine}],
              planes},
     lights},
@@ -119,7 +119,7 @@ entry add_plane ({objects={spheres, planes}, lights}: world)
                 (pos_x: f32) (pos_y: f32) (pos_z: f32)
                 (norm_x: f32) (norm_y: f32) (norm_z: f32)
                 (colour: argb.colour)
-                (shine: f32): (world, i32) =
+                (shine: f32): (world, i64) =
   ({objects={spheres,
              planes = planes ++ [{position={x=pos_x, y=pos_y, z=pos_z},
                                   normal={x=norm_x, y=norm_y, z=norm_z},
@@ -135,7 +135,7 @@ entry add_light ({objects, lights}: world)
    lights = lights ++ [{position={x, y, z}, colour, intensity}] }
 
 entry render ({objects, lights}: world)
-             (sizeX: i32) (sizeY: i32) (fov: i32)
+             (sizeX: i64) (sizeY: i64) (fov: i32)
              (eye_pos_X: f32) (eye_pos_Y: f32) (eye_pos_Z: f32)
              (eye_dir_A: f32) (eye_dir_B: f32)
              (ambient: argb.colour) (ambient_intensity: f32)
