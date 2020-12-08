@@ -1,7 +1,7 @@
 all: engine.py
 
 run: engine.py
-	python futball.py
+	python3 futball.py
 
 engine.py: engine/*.fut engine/lib
 	futhark pyopencl --library engine/engine.fut -o engine
