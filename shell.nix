@@ -4,11 +4,12 @@ mkShell {
   buildInputs = [
     ocl-icd
     opencl-headers
-    python3
-    python3Packages.pygame
-    python3Packages.numpy
-    python3Packages.pyopencl
+    python311
+    python311Packages.pygame
+    python311Packages.numpy
+    python311Packages.pyopencl
     SDL2
     SDL2_ttf
+    futhark
   ];
 }
